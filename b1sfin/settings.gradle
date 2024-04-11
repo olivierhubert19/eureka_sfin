@@ -1,0 +1,2 @@
+rootProject.name = 'b1sfin'
+include ':eureka_server',':b1sfin'

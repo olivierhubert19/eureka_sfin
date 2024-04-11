@@ -1,0 +1,10 @@
+1.	Tìm hiểu Spring Cloud Gateway
+
+2.	Tìm hiểu eureka service.
+
+3.	Code theo mô hình micro service.
+
+1.Authen service dùng để login tạo mã JWT, tạo TK để đăng nhập (lưu token vào trong redis với thời hạn 30p) –> bảng Admin)
+2. Spring Cloud Gateway xác thực token(verify token, kiểm tra token có tồn tại trong redis), routing request xuống Business Service, Authen Service để thực hiện chức năng (cần public api để login – không cần xác thực token, api còn lại cần phải xác thực token)
+3. Business Service là service đã làm bài 1.
+4. Cài đặt Eureka Service kết nối 3 service trên tới eureka service, liên kết giữa các service qua application name.

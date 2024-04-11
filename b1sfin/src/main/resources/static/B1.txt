@@ -1,0 +1,7 @@
+B1: Bài toán quản lý nhân sự trong công ty.
+-	Chức năng quản lý nhân viên: thêm sửa, xóa, tìm kiếm, bộ lọc theo trạng thái công việc, phòng ban.
+    (tên, số điện thoại, email, địa chỉ, thời gian tạo, trạng trái (đã làm , đã nghỉ), phòng ban, vai trò)
+-	Chức năng quản lý phòng ban: thêm sửa xóa phòng ban. (mã phòng ban, tên , trạng thái)
+-	Chức năng vai trò: CRUD (mã quyền, tên quyền,  trạng thái).
+-	Thiết kế Cơ sở dữ liệu khóa chính , khóa ngoại.
+Công nghệ sử dụng: Spring Boot, MySQL, theo mô hình nguyên khối monolithic.
