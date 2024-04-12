@@ -22,7 +22,8 @@ public class User {
     @NonNull
     private String password;
 
-    public boolean Check() {
+
+    public boolean CheckLogin() {
         if(username==null){
             return false;
         }
@@ -32,13 +33,10 @@ public class User {
         if(password==null){
             return false;
         }
-        if (password.isEmpty()){
-            return false;
-        }
-        return true;
+        return !password.isEmpty();
     }
 
-    public boolean Check1() {
+    public boolean CheckRegister() {
         if(id==null){
             return false;
         }
@@ -54,9 +52,6 @@ public class User {
         if(password==null){
             return false;
         }
-        if (password.isEmpty()){
-            return false;
-        }
-        return true;
+        return !password.isEmpty();
     }
 }

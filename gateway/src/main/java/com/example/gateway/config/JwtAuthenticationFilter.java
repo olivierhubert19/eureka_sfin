@@ -37,7 +37,6 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         }
         final String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
         if(authHeader==null||!authHeader.startsWith("Bearer ")){
-            System.out.println("Wrong format");
              exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
              return exchange.getResponse().setComplete();
         }
@@ -45,7 +44,6 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         if(tokenService.isInValidToken(jwt)){
            return chain.filter(exchange);
         }
-        System.out.println("Not exist");
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
         return response.setComplete();

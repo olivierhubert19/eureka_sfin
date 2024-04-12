@@ -17,7 +17,6 @@ public class JwtService {
             Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(jwt).getBody();
             Date endDate = claims.getExpiration();
             if(endDate==null) return false;
-            System.out.println(endDate);
             return endDate.after(new Date());
         } catch (Exception e) {
             return false;

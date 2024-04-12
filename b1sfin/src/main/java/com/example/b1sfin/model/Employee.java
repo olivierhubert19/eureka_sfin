@@ -39,8 +39,7 @@ public class Employee {
         if(address.isEmpty()) return false;
         if(beginAt==null) return false;
         if(agency==null) return false;
-        if(role==null) return false;
-        return true;
+        return role != null;
     }
 
     public boolean checkUpdate() {
@@ -56,7 +55,6 @@ public class Employee {
         if(address.isEmpty()) return false;
         if(beginAt==null) return false;
         if(agency==null) return false;
-        if(role==null) return false;
-        return true;
+        return role != null;
     }
 }

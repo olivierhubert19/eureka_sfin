@@ -22,8 +22,7 @@ public class Agency {
         if(this.name==null) return false;
         if(this.name.isEmpty()) return false;
         if(this.status==null) return false;
-        if(this.status.isEmpty()) return false;
-        return true;
+        return !this.status.isEmpty();
     }
 
     public boolean checkUpdate() {
@@ -32,7 +31,6 @@ public class Agency {
         if(this.name==null) return false;
         if(this.name.isEmpty()) return false;
         if(this.status==null) return false;
-        if(this.status.isEmpty()) return false;
-        return true;
+        return !this.status.isEmpty();
     }
 }

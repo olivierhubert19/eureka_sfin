@@ -3,7 +3,7 @@ package com.example.user_service.controller;
 import com.example.user_service.model.User;
 import com.example.user_service.service.JwtService;
 import com.example.user_service.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user_service/api")
 @CrossOrigin
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private JwtService jwtService;
+    private final UserService userService;
+    private final JwtService jwtService;
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user){
-        if(!user.Check()){
+        if(!user.CheckLogin()){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Missed information");
         }
         User userCheck = userService.findByUsername(user.getUsername());
@@ -33,7 +32,7 @@ public class UserController {
     }
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user){
-        if(!user.Check1()){
+        if(!user.CheckRegister()){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Missed information");
         }
         User userCheck = userService.findByUsername(user.getUsername());
