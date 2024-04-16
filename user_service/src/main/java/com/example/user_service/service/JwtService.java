@@ -1,11 +1,13 @@
 package com.example.user_service.service;
 
 
+import com.example.user_service.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +18,19 @@ import java.util.*;
 public class JwtService {
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
-    final String SECRET_KEY = "1239847129038471293847129384712093847129387412912903847";
+    @Value("${SECRET_KEY}")
+    private String SECRET_KEY;
     final String TOKEN = "Token: ";
 
-    public String generateToken() {
+    public String generateToken(User user) {
         String jwt = Jwts
                 .builder()
+                .setSubject(user.getId()+" "+user.getRole())
                 .setIssuedAt(new Date())
                 .setExpiration( new Date(new Date().getTime() + 1000 * 60 * 60 * 24))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
-        redisTemplate.opsForValue().set(TOKEN+jwt.substring(1,9),jwt);
+        redisTemplate.opsForValue().set(TOKEN+user.getId(),jwt);
         return jwt;
     }
 

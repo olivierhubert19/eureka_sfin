@@ -27,7 +27,7 @@ public class UserController {
         if(!userCheck.getPassword().equals(user.getPassword())){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Wrong password");
         }
-        String token = jwtService.generateToken();
+        String token = jwtService.generateToken(user);
         return ResponseEntity.ok(token);
     }
     @PostMapping("/register")

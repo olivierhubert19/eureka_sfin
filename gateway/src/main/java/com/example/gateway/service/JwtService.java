@@ -3,6 +3,7 @@ package com.example.gateway.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import java.util.Date;
@@ -10,7 +11,8 @@ import java.util.Date;
 @Component
 @Slf4j
 public class JwtService {
-    private final String SECRET_KEY = "1239847129038471293847129384712093847129387412912903847";
+    @Value("${SECRET_KEY}")
+    private String SECRET_KEY;
 
     public boolean validateJwtToken(String jwt) {
         try {

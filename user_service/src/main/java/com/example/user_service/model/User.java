@@ -18,6 +18,8 @@ public class User {
     @NonNull
     private String id;
     @NonNull
+    private String role;
+    @NonNull
     private String username;
     @NonNull
     private String password;
@@ -47,6 +49,12 @@ public class User {
             return false;
         }
         if (username.isEmpty()){
+            return false;
+        }
+        if(role==null){
+            return false;
+        }
+        if (role.isEmpty()){
             return false;
         }
         if(password==null){
