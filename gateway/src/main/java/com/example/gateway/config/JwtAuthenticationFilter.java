@@ -1,17 +1,10 @@
 package com.example.gateway.config;
 
 import com.example.gateway.service.TokenService;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
@@ -22,14 +15,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
-
 @Component
-@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     private final TokenService tokenService;
@@ -53,7 +42,8 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
             exchange.getResponse().setStatusCode(HttpStatus.NOT_ACCEPTABLE);
             return exchange.getResponse().setComplete();
         }
-        final String role = tokenService.getRoleFromToken(jwt);
+        final String[] subject = tokenService.getSubjectFromToken(jwt).split(" ");
+        final String role = subject[1];
         MultiValueMap<String,String> params = new LinkedMultiValueMap<>();
         params.add("path",path);
         params.add("method",method);
@@ -64,16 +54,18 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
             ServerHttpResponse response = exchange.getResponse();
             response.setStatusCode(HttpStatus.BAD_REQUEST);
             return response.setComplete();
+        }else{
+            if(responseAuthen.getStatusCode()==HttpStatus.OK){
+                final String userid = subject[0];
+                redisTemplate.opsForValue().set("User_authen_"+userid,responseAuthen.getBody());
+                return chain.filter(exchange);
+            }else {
+                System.out.println(responseAuthen.getBody());
+                ServerHttpResponse response = exchange.getResponse();
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                return response.setComplete();
+            }
         }
-        if(responseAuthen.getStatusCode()==HttpStatus.OK){
-            final String userid = tokenService.getUserIdFromToken(jwt);
-            redisTemplate.opsForValue().set("User_authen_"+userid,responseAuthen.getBody());
-            return chain.filter(exchange);
-        }
-        System.out.println(responseAuthen.getBody());
-        ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(HttpStatus.UNAUTHORIZED);
-        return response.setComplete();
     }
 
     @Override

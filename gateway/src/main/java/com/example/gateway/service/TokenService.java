@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 
 
 @Service
@@ -35,23 +34,10 @@ public class TokenService {
         }
     }
 
-    public String getRoleFromToken(String token){
+    public String getSubjectFromToken(String token){
         try {
             Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
-            String[] userInfo = claims.getSubject().split(" ");
-            if(userInfo[0]==null) return null;
-            return userInfo[1];
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-    }
-    public String getUserIdFromToken(String token){
-        try {
-            Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
-            String[] userInfo = claims.getSubject().split(" ");
-            if(userInfo[0]==null) return null;
-            return userInfo[0];
+            return claims.getSubject();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;

@@ -1,6 +1,5 @@
 package com.example.b1sfin.service;
 
-import com.example.b1sfin.model.Agency;
 import com.example.b1sfin.model.Role;
 import com.example.b1sfin.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;

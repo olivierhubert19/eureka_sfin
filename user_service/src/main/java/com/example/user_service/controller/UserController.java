@@ -1,5 +1,6 @@
 package com.example.user_service.controller;
 
+import com.example.user_service.lib.UUID;
 import com.example.user_service.model.User;
 import com.example.user_service.service.JwtService;
 import com.example.user_service.service.UserService;
@@ -39,6 +40,7 @@ public class UserController {
         if(userCheck!=null){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Username is exist");
         }
+        user.setId(UUID.generateID());
         if(userService.save(user)){
             return ResponseEntity.ok("Register success");
         }
