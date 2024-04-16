@@ -18,14 +18,14 @@ import java.util.List;
 public class RoleController {
     private final RoleService roleService;
     @GetMapping("/get_all")
-    public ResponseEntity<?> getAllPermission(){
+    public ResponseEntity<?> getAllRole(){
         List<Role> permissionList = roleService.getAll();
         if(permissionList.isEmpty()) return ResponseEntity.ok("Does not exist permission");
         return ResponseEntity.ok(permissionList);
     }
 
     @PutMapping("/public/{id}")
-    public ResponseEntity<?> publicPermission(@PathVariable("code") String code){
+    public ResponseEntity<?> publicRole(@PathVariable("code") String code){
         Role role = roleService.findByCode(code);
         if(role==null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't find");
         else{
