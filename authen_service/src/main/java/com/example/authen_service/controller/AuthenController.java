@@ -28,11 +28,14 @@ public class AuthenController {
         if(permission==null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't find this URL");
         if(!permission.isActive()||!permission.isPublic()) return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Can't access this URL");
         Role role = roleService.findByCode(code);
-        if (role==null) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Can't find role");
+        if (role==null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Can't find role");
+        if(!role.isActive()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Role is inactive");
         boolean roleHasPermissionExist = roleHasPermissionService.existsRoleHasPermissionByPermissionAndRole(permission,role);
 //        [{role_id, permission_id, path, method, isPermission}]
-        final String responseString = role.getId()+", "+permission.getId()+", "+path+", "+method+", isPermission:"+roleHasPermissionExist;
-        if(roleHasPermissionExist) ResponseEntity.ok(responseString);
+        if(roleHasPermissionExist) {
+            final String responseString = role.getId()+", "+permission.getId()+", "+path+", "+method+", isPermission:"+roleHasPermissionExist;
+            ResponseEntity.ok(responseString);
+        }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not have access");
     }
 
