@@ -19,9 +19,9 @@ public class RoleController {
     private final RoleService roleService;
     @GetMapping("/get_all")
     public ResponseEntity<?> getAllRole(){
-        List<Role> permissionList = roleService.getAll();
-        if(permissionList.isEmpty()) return ResponseEntity.ok("Does not exist permission");
-        return ResponseEntity.ok(permissionList);
+        List<Role> roleList = roleService.getAll();
+        if(roleList.isEmpty()) return ResponseEntity.ok("Does not exist permission");
+        return ResponseEntity.ok(roleList);
     }
 
     @PutMapping("/public/{id}")
@@ -42,7 +42,7 @@ public class RoleController {
             roleService.save(role);
             return ResponseEntity.ok("Save success");
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Can't save the permission");
+            return ResponseEntity.badRequest().body("Can't save the role");
         }
 
     }
