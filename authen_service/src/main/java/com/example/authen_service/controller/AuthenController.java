@@ -30,7 +30,9 @@ public class AuthenController {
         Role role = roleService.findByCode(code);
         if (role==null) ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Can't find role");
         boolean roleHasPermissionExist = roleHasPermissionService.existsRoleHasPermissionByPermissionAndRole(permission,role);
-        if(roleHasPermissionExist) ResponseEntity.ok("Access success");
+//        [{role_id, permission_id, path, method, isPermission}]
+        final String responseString = role.getId()+", "+permission.getId()+", "+path+", "+method+", isPermission:"+roleHasPermissionExist;
+        if(roleHasPermissionExist) ResponseEntity.ok(responseString);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not have access");
     }
 

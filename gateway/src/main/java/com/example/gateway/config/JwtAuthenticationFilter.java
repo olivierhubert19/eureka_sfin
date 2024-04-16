@@ -13,6 +13,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     private final TokenService tokenService;
     private final RestTemplate restTemplate;
+    private final RedisTemplate<String,String> redisTemplate;
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         final String path = exchange.getRequest().getPath().toString();
@@ -63,7 +65,11 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
             response.setStatusCode(HttpStatus.BAD_REQUEST);
             return response.setComplete();
         }
-        if(responseAuthen.getStatusCode()==HttpStatus.OK) return chain.filter(exchange);
+        if(responseAuthen.getStatusCode()==HttpStatus.OK){
+            final String userid = tokenService.getUserIdFromToken(jwt);
+            redisTemplate.opsForValue().set("User_authen_"+userid,responseAuthen.getBody());
+            return chain.filter(exchange);
+        }
         System.out.println(responseAuthen.getBody());
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.UNAUTHORIZED);

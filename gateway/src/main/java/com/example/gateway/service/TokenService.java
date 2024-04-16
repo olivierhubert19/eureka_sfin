@@ -46,5 +46,16 @@ public class TokenService {
             return null;
         }
     }
+    public String getUserIdFromToken(String token){
+        try {
+            Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+            String[] userInfo = claims.getSubject().split(" ");
+            if(userInfo[0]==null) return null;
+            return userInfo[0];
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 
 }
